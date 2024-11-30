@@ -35,7 +35,7 @@ class LoginController extends AppController {
                 // echo '<pre>';print_r($last_query);exit();
                 if(!empty($chkDup)){ 
                     // echo 111;exit;
-                    request()->session()->flash('success', "This User Email ID is already registered!!!");
+                    request()->session()->flash('success', "This User Email ID or Mobile Number is already registered!!!");
                     return redirect('Login/signup');
                 } else {
                     // echo 222;exit;
@@ -61,7 +61,7 @@ class LoginController extends AppController {
     } 
 
     public function login() {
-        // echo 111;exit();
+         
         $this->viewVars[] = '';
         $userTable = new UserTable();
         if(!empty(request()->all()) && request()->isMethod('post')) {
@@ -88,7 +88,7 @@ class LoginController extends AppController {
 
                 if(empty($getUserTable)){ 
                     $status['status'] = 'error';
-                    $status['error_msg'] = "Invalid User Credential.";
+                    $status['error_msg'] = "Please check your email ID or password is wrong!";
                     return redirect('Login/login')->with('error', $status['error_msg']);
                 } else { 
                     session(['User_Session_Data' => $getUserTable[0]]); 

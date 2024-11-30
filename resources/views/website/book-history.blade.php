@@ -50,7 +50,7 @@
                         <table border="2" class="table table-bordered">
                             <thead class="gray-bg" >
                                 <tr>
-                                <th>#</th>
+                                <th>Sl#</th>
                                 <th>Appointment Number</th>
                                 <th>Appointment Date</th>
                                 <th>Appointment Time</th>
@@ -78,6 +78,10 @@
                                         <?php } else if($bookData['Status'] == 2) { ?>
                                             <span class="badge badge-pill badge-danger"> 
                                                 Your booking has been rejected
+                                            </span>
+                                        <?php } else if($bookData['approvedStatus'] == 1 && $bookData['Status'] == 3) { ?>
+                                            <span class="badge badge-pill badge-info"> 
+                                                Completed
                                             </span>
                                         <?php }  ?>
                                     </td>   

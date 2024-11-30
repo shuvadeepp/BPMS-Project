@@ -62,7 +62,7 @@
                             <textarea class="form-control" id="appointmentMsg" name="appointmentMsg" placeholder="Appointment Message"></textarea>
                             <span style="color: red;" class="errMsg_appointmentMsg errDiv"></span>
                         </div>
-                        <button type="submit" class="btn btn-contact" onclick="return validator();">Make an Appointmen</button>
+                        <button type="submit" class="btn btn-contact btn-red" onclick="return validator();" style="background-color: #db3e3e; color: white;">Make an Appointmen</button>
 
                         <button type="submit" class="btn btn-contact">
                             <a href="<?php echo WEBSITE_URL.'bookHistory' ?>" style="text-decoration: none; color: white;">

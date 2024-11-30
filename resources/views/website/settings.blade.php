@@ -74,7 +74,7 @@
 
                         <button type="button" class="btn btn-danger" style="float: right; padding: 13px; margin: 21px 2px 4px 1px;">
                             <a href="<?php echo WEBSITE_URL.'bookAppointment' ?>" style="text-decoration: none; color: white;">
-                                Book Appointment 
+                                Go Back 
                             </a>
                         </button> 
 

@@ -1,5 +1,6 @@
 @section('innercontent')
 <!-- main content start-->
+<?php //echo'<pre>'; print_r($totCusCount->totCusCount);exit; ?>
 <div id="page-wrapper" class="row calender widget-shadow">
 <div class="main-page">
     
@@ -13,7 +14,7 @@
                 <h4>Customer</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label> <?php echo $totCusCount; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>

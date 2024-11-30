@@ -38,6 +38,10 @@
                   <td> <?php echo date('d-m-Y', strtotime($arrEditRecord->BookingDate)) ?></td>
                </tr>
                <tr>
+                  <th>Message</th>
+                  <td> <?php echo $arrEditRecord->Message ?>  </td>
+               </tr>
+               <tr>
                   <th>Status</th>
                   <td> <span class="badge text-bg-warning "> <?php echo $arrEditRecord->BOOKSTATUS ?> </span> </td>
                </tr>

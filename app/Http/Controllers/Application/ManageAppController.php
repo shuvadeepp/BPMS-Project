@@ -9,6 +9,7 @@ use App\models\AboutUsModel;
 use App\models\ContactusModel;
 use App\models\InvoiceModel;
 use App\models\BookingModel;
+use App\Models\UserTable;
 use DB;
 use Validator;
 use PhpParser\Node\Expr\Print_;
@@ -17,7 +18,14 @@ use Storage;
 class ManageAppController extends AppController {
   
     public function index(){
-        return view('Portal.Application.dashboard');
+
+        /* Total Customer Count Start */
+        $totalCustomerCount=DB::select("select Count(1) as totCusCount from tbluser where DeletedFlag=0"); 
+        /* Total Customer Count End */
+// echo'<pre>'; print_r($totalCustomerCount);exit;
+        $this->viewVar['totCusCount'] = $totalCustomerCount[0]->totCusCount; 
+        
+        return view('Portal.Application.dashboard', $this->viewVar);
     }
 
     public function addServices($serviceId){
@@ -302,7 +310,8 @@ class ManageAppController extends AppController {
             WHEN 1 THEN 'Approved'
             WHEN 2 THEN 'Rejected'
             ELSE 'Not Updated Yet'
-        END AS BOOKSTATUS
+        END AS BOOKSTATUS,
+        B.Message
     FROM
         tblbook B
             LEFT JOIN
@@ -398,6 +407,7 @@ class ManageAppController extends AppController {
                 ->where('TU.DeletedFlag', 0)
                 ->where('TB.Status', 1)
                 ->groupBy('TU.ID', 'TU.FirstName', 'TU.LastName', 'TB.AptNumber', 'TU.MobileNumber', 'TU.Email', 'TB.BookingDate', 'TB.approvedStatus')
+                ->orderBy('TB.BookingDate', 'desc')
                 ->paginate(10);
         
         
@@ -426,7 +436,8 @@ class ManageAppController extends AppController {
         if(!empty(request()->all()) && request()->isMethod('post')) {
             
             $userId = intval($approvedId);
-            $generateInvoiceNumber = mt_rand(100000000, 999999999);
+            $generateInvoiceNumber = mt_rand(100000000, 999999999); 
+            // dd(session('User_Session_Data'));
             $serviceIds = request()->input('sids');
             // echo'<pre>';print_r($generateInvoiceNumber);exit;
             foreach ($serviceIds as $serviceId) {
@@ -435,13 +446,21 @@ class ManageAppController extends AppController {
                 $invoice->Userid                  = $userId;
                 $invoice->ServiceId               = $serviceId;
                 $invoice->BillingId               = $generateInvoiceNumber;
-                $invoice->assignServiceStatus     = 1;
-           
-                $invoice->save();
-                $userTable = BookingModel::where('ID', $invoice->Userid)->first();
-                // echo '<pre>';print_r($userTable->ID);exit;
-                if ($userTable) {
-                    $userTable->approvedStatus = 1;
+                $invoice->assignServiceStatus     = 1;  
+                $invoice->save(); 
+            } 
+            // echo'<pre>'; print_r($invoice); exit;
+            /* :::::::::: UPDATE approvedStatus to 1 for generate receipt  :::::::::: */
+            $bookingTable = BookingModel::where('UserID', $invoice->Userid)->first();
+            
+            if (!empty($bookingTable->UserID)) {  
+                $bookingTable->Status = 3; // completed
+                $bookingTable->approvedStatus = 1; 
+                $bookingTable->billGenerateId = $generateInvoiceNumber;
+                $bookingTable->save();
+                $userTable    = UserTable::where('ID', $invoice->Userid)->first();
+                if(!empty($userTable->ID)){
+                    $userTable->billGenerateId = $generateInvoiceNumber; 
                     $userTable->save();
                 }
             }
@@ -465,6 +484,7 @@ class ManageAppController extends AppController {
         ->where('TI.AssignServiceStatus', 1)
         ->select('TU.ID', 'TU.FirstName', 'TU.LastName', 'TU.MobileNumber', 'TI.BillingId', 'TI.PostingDate')
         ->groupBy('TU.ID', 'TU.FirstName', 'TU.LastName', 'TU.MobileNumber', 'TI.BillingId', 'TI.PostingDate')
+        ->orderBy('TI.PostingDate', 'desc')
         ->paginate(10);
         $this->viewVar['printAllRecord'] = $Printpage;
         // echo'<pre>';print_r($this->viewVar);exit;

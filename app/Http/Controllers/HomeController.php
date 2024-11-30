@@ -131,7 +131,8 @@ class HomeController extends AppController {
             'TB.AptTime',
             'TB.Message',
             'TB.BookingDate',
-            'TB.Status'
+            'TB.Status',
+            'TB.approvedStatus'
         )->orderBy('TB.BookingDate', 'desc')->get();
         $bookinQuery = json_decode(json_encode($bookinQuery), true);
         // echo'<pre>';print_r($bookinQuery);exit;
@@ -143,7 +144,7 @@ class HomeController extends AppController {
         $decryptId = decrypt($appountmentId);
 
         $aptDetailsQuery = DB::table('tbluser as U')
-        ->select('B.AptNumber', 'U.FirstName', 'U.LastName', 'U.Email', 'U.MobileNumber', 'B.AptDate', 'B.AptTime', 'B.BookingDate', 'B.Status')
+        ->select('B.AptNumber', 'U.FirstName', 'U.LastName', 'U.Email', 'U.MobileNumber', 'B.AptDate', 'B.AptTime', 'B.BookingDate', 'B.Status', 'B.Remark','B.approvedStatus')
         ->join('tblbook as B', 'U.ID', '=', 'B.UserID')
         ->where('B.AptNumber', $decryptId)
         ->where('U.DeletedFlag', 0)
@@ -155,17 +156,26 @@ class HomeController extends AppController {
     }
     
     public function invoiceHistory(){
-        // dd(session('User_Session_Data.ID'));
-        $invoiceQuery = DB::table('tbluser as U')
-            ->select('U.ID as uid', 'U.FirstName', 'U.LastName', 'U.Email', 'U.MobileNumber', 'IV.BillingId', DB::raw('date(IV.PostingDate) as PostingDate'))
-            ->join('tblinvoice as IV', 'U.ID', '=', 'IV.Userid')
-            ->where('U.ID', session('User_Session_Data.ID'))
-            ->orderBy('IV.ID', 'desc')
-            // ->distinct()
-            ->get();
+        $getUserBill = UserTable::where('ID', session('User_Session_Data.ID'))->pluck('billGenerateId');  
+        // dd(session('User_Session_Data'));  
+        $invoiceQuery = DB::table('tbluser')
+        ->distinct()
+        ->select(
+            'tbluser.ID as uid',
+            'tbluser.FirstName',
+            'tbluser.LastName',
+            'tbluser.Email',
+            'tbluser.MobileNumber',
+            'tblinvoice.BillingId',
+            DB::raw('DATE(tblinvoice.PostingDate) as PostingDate')
+        )
+        ->join('tblinvoice', 'tbluser.ID', '=', 'tblinvoice.Userid')
+        ->where('tblinvoice.BillingId', $getUserBill[0])
+        ->where('tbluser.ID', session('User_Session_Data.ID'))
+        ->get();
         $invoiceQuery = json_decode(json_encode($invoiceQuery), true); 
-        $this->viewVars['invoiceData'] = $invoiceQuery;
-        // echo'<pre>';print_r($this->viewVars['invoiceData']);exit;
+ 
+        $this->viewVars['invoiceData'] = $invoiceQuery; 
         return view('website.invoice-history', $this->viewVars);
     }
 

@@ -65,11 +65,17 @@
                             <td><?php echo $aptDetails['BookingDate'];?></td>
                         </tr>  
                         <tr>
+                            <th>Message</th>
+                            <td><?php echo $aptDetails['Remark'];?></td>
+                        </tr>  
+                        <tr>
                             <th>Status</th> 
                             @if($aptDetails['Status'] == 1) 
                                 <td><span class="badge badge-success"> Appointment Approved </span></td>
                             @elseif($aptDetails['Status'] == 2) 
                                 <td><span class="badge badge-danger"> Appointment Rejected </span></td>
+                            @elseif($aptDetails['approvedStatus'] == 1 && $aptDetails['Status'] == 3) 
+                                <td><span class="badge badge-info"> Completed </span></td>
                             @else
                                 <td><span class="badge badge-primary"> Not Updated Yet </span></td>
                             @endif
