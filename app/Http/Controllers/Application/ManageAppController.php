@@ -21,9 +21,51 @@ class ManageAppController extends AppController {
 
         /* Total Customer Count Start */
         $totalCustomerCount=DB::select("select Count(1) as totCusCount from tbluser where DeletedFlag=0"); 
-        /* Total Customer Count End */
-// echo'<pre>'; print_r($totalCustomerCount);exit;
-        $this->viewVar['totCusCount'] = $totalCustomerCount[0]->totCusCount; 
+        /* Total Customer Count End */ 
+
+        /* Total Appointmen Count Start */
+        $totaltAptmntCount=DB::select("select count(1) as totAptmnt from tblbook where DeletedFlag=0"); 
+        /* Total Appointmen Count End */
+
+        /* Total Appointmen Accpted Count Start */
+        $totalttotAptmntAccptCount=DB::select("select count(1) as totAptmntAccpt from tblbook where DeletedFlag=0 and Status=1;"); 
+        /* Total Appointmen Accpted Count End */
+
+        /* Total Appointmen Accpted Count Start */
+        $totalAptmntRejctedCount=DB::select("select count(1) as totAptmntRejcted from tblbook where DeletedFlag=0 and Status=2;"); 
+        /* Total Appointmen Accpted Count End */
+
+        /* Total Appointmen Accpted Count Start */
+        $totaltServicesCount=DB::select("Select count(1) as totServices from  tblservices where DeletedFlag=0;"); 
+        /* Total Appointmen Accpted Count End */
+
+        /* Total Today Sales Count Start */ 
+        $totalSaleStatus=DB::select("select case when sum(S.Cost) is null then 0 else sum(S.Cost) end as SaleStatus from tblinvoice I left join tblservices S on S.ID=I.ServiceId where date(I.PostingDate)=CURDATE();"); 
+        /* Total Today Sales Count End */
+
+        /* Total Previous Sales Count Start */ 
+        $totalPrevSaleStatus=DB::select("select case when sum(S.Cost) is null then 0 else sum(S.Cost) end as PrevSaleStatus from tblinvoice I left join tblservices S on S.ID=I.ServiceId where date(I.PostingDate)=CURDATE()- INTERVAL 1 DAY;"); 
+        /* Total Previous Sales Count End */
+
+        /* Total Last Seven Days Sales Count Start */ 
+        $totalLstSevenDaysSale=DB::select("select case when sum(S.Cost) is null then 0 else sum(S.Cost) end as lastSevenSale from tblinvoice I left join tblservices S on S.ID=I.ServiceId where date(I.PostingDate)=CURDATE()- INTERVAL 7 DAY;"); 
+        /* Total Last Seven Days Sales Count End */
+
+        /* Total Last 30 Days Sales Count Start */ 
+        $totalLastThirtyDays=DB::select("select case when sum(S.Cost) is null then 0 else sum(S.Cost) end as ThirtyDaysSaleStatus from tblinvoice I left join tblservices S on S.ID=I.ServiceId where date(I.PostingDate) between curdate() - interval 30 day and curdate();"); 
+        /* Total Last 30 Days  Sales Count End */
+
+        // echo'<pre>'; print_r($totaltPrevSaleStatus);exit;
+
+        $this->viewVar['totCusCount']           = $totalCustomerCount[0]->totCusCount; 
+        $this->viewVar['totAptmnt']             = $totaltAptmntCount[0]->totAptmnt; 
+        $this->viewVar['totAptmntAccpt']        = $totalttotAptmntAccptCount[0]->totAptmntAccpt; 
+        $this->viewVar['totAptmntRejcted']      = $totalAptmntRejctedCount[0]->totAptmntRejcted; 
+        $this->viewVar['totServices']           = $totaltServicesCount[0]->totServices; 
+        $this->viewVar['SaleStatus']            = $totalSaleStatus[0]->SaleStatus;  
+        $this->viewVar['PrevSaleStatus']        = $totalPrevSaleStatus[0]->PrevSaleStatus;  
+        $this->viewVar['lastSevenSale']         = $totalLstSevenDaysSale[0]->lastSevenSale;  
+        $this->viewVar['ThirtyDaysSaleStatus']         = $totalLastThirtyDays[0]->ThirtyDaysSaleStatus;  
         
         return view('Portal.Application.dashboard', $this->viewVar);
     }
@@ -309,6 +351,7 @@ class ManageAppController extends AppController {
         CASE B.Status 
             WHEN 1 THEN 'Approved'
             WHEN 2 THEN 'Rejected'
+            WHEN 3 THEN 'Complete'
             ELSE 'Not Updated Yet'
         END AS BOOKSTATUS,
         B.Message
@@ -403,10 +446,10 @@ class ManageAppController extends AppController {
 
             $approveList = DB::table('tbluser as TU')
                 ->leftJoin('tblbook as TB', 'TU.ID', '=', 'TB.UserID')
-                ->select('TU.ID', 'TU.FirstName', 'TU.LastName', 'TB.AptNumber', 'TU.MobileNumber', 'TU.Email', 'TB.BookingDate', 'TB.approvedStatus')
+                ->select('TU.ID', 'TU.billGenerateId', 'TU.FirstName', 'TU.LastName', 'TB.AptNumber', 'TU.MobileNumber', 'TU.Email', 'TB.BookingDate', 'TB.approvedStatus', 'TB.Status')
                 ->where('TU.DeletedFlag', 0)
                 ->where('TB.Status', 1)
-                ->groupBy('TU.ID', 'TU.FirstName', 'TU.LastName', 'TB.AptNumber', 'TU.MobileNumber', 'TU.Email', 'TB.BookingDate', 'TB.approvedStatus')
+                ->groupBy('TU.ID', 'TU.billGenerateId', 'TU.FirstName', 'TU.LastName', 'TB.AptNumber', 'TU.MobileNumber', 'TU.Email', 'TB.BookingDate', 'TB.approvedStatus', 'TB.Status')
                 ->orderBy('TB.BookingDate', 'desc')
                 ->paginate(10);
         

@@ -25,7 +25,7 @@
                 <h4>Appointment</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label> <?php echo $totAptmnt; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
@@ -36,7 +36,7 @@
                 <h4>Accepted Apt</h4>
             </div>
             <div class="stats-right">
-                <label> </label>
+                <label> <?php echo $totAptmntAccpt; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
@@ -54,7 +54,7 @@
                 <h4>Rejected Apt</h4>
             </div>
             <div class="stats-right">
-                <label> </label>
+                <label> <?php echo $totAptmntRejcted; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
@@ -65,7 +65,7 @@
                 <h4>Services</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label> <?php echo $totServices; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
@@ -76,7 +76,7 @@
                 <h4>Sales</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label>₹<?php echo $SaleStatus; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
@@ -93,27 +93,27 @@
                 <h4>Sales</h4>
             </div>
             <div class="stats-right">
-                <label> </label>
+                <label> ₹<?php echo $PrevSaleStatus; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
         <div class="col-md-4 widget states-mdl"> 
             <div class="stats-left">
-                <h5>Last Sevendays</h5>
+                <h5>Last Seven Days</h5>
                 <h4>Sale</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label> ₹<?php echo $lastSevenSale; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>
         <div class="col-md-4 widget states-last"> 
             <div class="stats-left">
-                <h5>Total</h5>
+                <h5>Last 30 Days</h5>
                 <h4>Sales</h4>
             </div>
             <div class="stats-right">
-                <label>  </label>
+                <label> ₹<?php echo $ThirtyDaysSaleStatus; ?> </label>
             </div>
             <div class="clearfix"> </div>	
         </div>

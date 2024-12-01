@@ -56,16 +56,18 @@
                      <?php 
 
                         $strParam   = encrypt(json_encode($record->ID)); 
-                        $strEnc = str_replace('=','',$strParam);     
+                        $strEnc = str_replace('=','',$strParam);  
+                        $strBillIdParam   = encrypt(json_encode($record->billGenerateId));  
+                        $strBillIdEnc = str_replace('=','',$strBillIdParam);    
                         // $strParambilling   = encrypt(json_encode($record->BillingId)); 
                         // $strEncinvoice = str_replace('=','',$strParambilling);     
-                        // echo $strEnc;
+                        // echo $strBillIdEnc;
                      ?>
                      <td>  
                         @if($record->approvedStatus != 1)
                         <a href="<?php echo ADMIN_MANAGEAPP . 'assignService/' . $strEnc ?>" class="btn btn-primary">Assign Services</a>
                         @else
-                        <a href="<?php echo ADMIN_MANAGEAPP . 'approvedPrint/' ?>" class="btn btn-success">Generate Receipt</a>
+                        <a href="<?php echo ADMIN_MANAGEAPP . 'printInvoice/' . $strBillIdEnc ?>" class="btn btn-success">Generate Receipt</a>
                         @endif 
                      </td>
                   </tr>

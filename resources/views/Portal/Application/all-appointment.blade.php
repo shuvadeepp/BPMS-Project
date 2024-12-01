@@ -35,10 +35,10 @@
             @csrf
                 <label for=""> Filter :</label>
                 <select class="form-select" name="filterStatus" id="filterStatus">
-                    <option value="0">All List</option>
-                    <!-- <option value="1">New Appointment</option> -->
-                    <option value="1" {{ (isset($filterStatus) && $filterStatus == 1) ? 'selected' : '' }}> Accepted List </option>
-                    <option value="2" {{ (isset($filterStatus) && $filterStatus == 2) ? 'selected' : '' }}> Rejected List </option>
+                    <option value="0">All List</option> 
+                    <option value="1" {{ (isset($filterStatus) && $filterStatus == 1) ? 'selected' : '' }}> Accepted </option>
+                    <option value="2" {{ (isset($filterStatus) && $filterStatus == 2) ? 'selected' : '' }}> Rejected </option>
+                    <option value="3" {{ (isset($filterStatus) && $filterStatus == 3) ? 'selected' : '' }}> Complete </option>
                     
                 </select>&nbsp;&nbsp;
                 <button type="submit" class="btn btn-outline-primary">Search</button>
@@ -75,13 +75,18 @@
                             <td style="color: red; font-weight: bold;"> {{ date('h:i A', strtotime($appmnt->BookingDate)) }} </td>  
                         <?php }elseif($appmnt->Status == '') { ?>
                             <td style="font-weight: bold;"> {{ date('h:i A', strtotime($appmnt->BookingDate)) }} </td>  
+                        <?php }elseif($appmnt->Status == 3) { ?>
+                            <td style="color: gray; font-weight: bold;"> {{ date('h:i A', strtotime($appmnt->BookingDate)) }} </td>  
                         <?php } ?>
+                        
                         <?php if($appmnt->Status == '1') { ?>
-                        <td><span class="badge text-bg-success"> Approved </span></td>  
+                        <td><span class="badge text-bg-success"> Approve </span></td>  
                         <?php }elseif($appmnt->Status == '2') { ?>
                         <td><span class="badge text-bg-danger">  Rejected  </span></td>  
                         <?php }elseif($appmnt->Status == '') { ?>
                         <td><span class="badge text-bg-warning ">  Not Updated Yet  </span></td>  
+                        <?php }elseif($appmnt->Status == '3') { ?>
+                            <td><span class="badge text-bg-warning ">  Completed  </span></td>  
                         <?php
                         }
                             $strParam   = encrypt(json_encode($appmnt->ID)); 
