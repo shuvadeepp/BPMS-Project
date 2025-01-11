@@ -194,13 +194,13 @@ class ManageAppController extends AppController {
                 $requestData = request()->all();  
                 
                 $validator   = \Validator::make($requestData, [
-                    /* 'pagetitle_one'      => 'required',
+                    'pagetitle_one'      => 'required',
                     'pagetitle_two'      => 'required',
                     'pagedes'            => 'required',
                     'aboutusCoverImg_One'=> 'image|mimes:jpg,png,jpeg|max:1024|required_without:hdnAboutusCoverImg_One',
-                    'aboutusCoverImg_Two'=> 'image|mimes:jpg,png,jpeg|max:1024|required_without:hdnAboutusCoverImg_Two',  */
+                    'aboutusCoverImg_Two'=> 'image|mimes:jpg,png,jpeg|max:1024|required_without:hdnAboutusCoverImg_Two', 
                 ],[
-                    /* 'pagetitle_one'      => 'Page Title one is required',
+                    'pagetitle_one'      => 'Page Title one is required',
                     'pagetitle_two'      => 'Page Title two is required',
                     'pagedes'            => 'Page Description is required',
                     'aboutusCoverImg_One.required_without'  => 'Image is required', 
@@ -209,7 +209,7 @@ class ManageAppController extends AppController {
 
                     'aboutusCoverImg_Two.required_without'  => 'Image is required', 
                     'aboutusCoverImg_Two.mimes'             => 'Image should be jpg,png,jpeg',
-                    'aboutusCoverImg_Two.max'               => 'Image should not be more than 1 mb', */
+                    'aboutusCoverImg_Two.max'               => 'Image should not be more than 1 mb',
                 ]);
                 if($validator->fails()) { 
                     return redirect(ADMIN_MANAGEAPP . 'aboutUs/')->withErrors($validator)->withInput();

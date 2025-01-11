@@ -75,7 +75,7 @@
 					<h3 class="team-head ">Come experience the secrets of relaxation</h3>
 					<p class="para  text ">
 						Best Beauty expert at your home and provides beauty salon at home. Home Salon provide well trained beauty professionals for beauty services at home including Facial, Clean Up, Bleach, Waxing,Pedicure, Manicure, etc.</p>
-						<a href="book-appointment.php" class="btn logo-button top-margin mt-4">Get An Appointment</a>
+						<!-- <a href="book-appointment.php" class="btn logo-button top-margin mt-4">Get An Appointment</a> -->
 				</div>
 			</div>
 		</div>
